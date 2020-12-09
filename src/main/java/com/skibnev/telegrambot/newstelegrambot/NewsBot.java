@@ -32,8 +32,7 @@ public class NewsBot extends TelegramLongPollingBot {
                 if (messageText.equals("/start")) {
                     sendMsg(update.getMessage().getChatId().toString(), "Please, enter your city name");
                 } else {
-                    String message = serviceRunner.run(messageText).block();
-                    sendMsg(update.getMessage().getChatId().toString(), message);
+                    serviceRunner.run(messageText).subscribe(message -> sendMsg(update.getMessage().getChatId().toString(), message));
                 }
             }
         }
@@ -45,7 +44,7 @@ public class NewsBot extends TelegramLongPollingBot {
         message.setText(text);
         try {
             execute(message);
-        }catch (TelegramApiException e) {
+        } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
